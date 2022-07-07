@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont, ImageOps
-
+import sys
 
 def create_scheme(base, img, pos_y, scale):
     w_shape, h_shape = base.size
@@ -7,12 +7,27 @@ def create_scheme(base, img, pos_y, scale):
 
     img = img.resize((int(w_shape * scale), int(w_shape / w * h * scale)))
     baseShape = Image.new("RGBA", img.size, "BLACK")
-    baseShape.show()
-    base.paste(img,(0,0), baseShape)
-    base.show()
     base.paste(img, (int(w_shape / 2 - img.size[0] / 2), pos_y), baseShape)
 
     return base
+
+
+def create_mask_from_shape(shape):
+    mask = shape.copy()
+
+    width = mask.size[0]
+    height = mask.size[1]
+    for i in range(0, width):  # process all pixels
+        for j in range(0, height):
+            data = mask.getpixel((i, j))
+            # print(data) #(255, 255, 255)
+            if (data[0] == 255 and data[1] == 255 and data[2] == 255):
+                mask.putpixel((i, j), (44, 44, 44))
+    mask.show()
+
+    mask.show()
+
+    return mask
 
 
 def create_from_schema(base, text, font, height):
