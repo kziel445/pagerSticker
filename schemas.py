@@ -1,3 +1,4 @@
+import PIL.ImageOps
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import sys
 
@@ -13,10 +14,11 @@ def create_scheme(base, img, pos_y, scale):
 
     base.putalpha(mask)
 
-    # base = Image.composite(base, base, mask)
-
-
-    return base
+    mask = mask.resize((mask.size[0]+2, mask.size[1]+2))
+    mask = PIL.ImageOps.invert(mask)
+    mask = mask.convert("RGBA")
+    mask.paste(base, (int((mask.size[0]-base.size[0])/2), int((mask.size[1]-base.size[1])/2)), base)
+    return mask
 
 
 def create_mask_from_shape(shape):
@@ -47,7 +49,8 @@ def add_text(text, font, img, pos_y):
 
 
 def create_a4_format(a4_base, base_schema, font, height, countStart, countStop):
-    position = [0, 0]
+    start_position = (50, 50)
+    position = [start_position[0], start_position[1]]
     for i in range(countStart, countStop + 1):
         tmp = create_from_schema(base_schema, str(i), font, height)
         if a4_base.size[1] < position[1] + base_schema.size[1]:
@@ -56,7 +59,7 @@ def create_a4_format(a4_base, base_schema, font, height, countStart, countStop):
         a4_base.paste(tmp, (position[0], position[1]), tmp)
 
         if a4_base.size[0] < position[0] + base_schema.size[0] * 2:
-                position[0] = 0
+                position[0] = start_position[0]
                 position[1] += base_schema.size[1] + 10
         else:
             position[0] += base_schema.size[0] + 10

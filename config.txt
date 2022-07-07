@@ -1,4 +1,4 @@
-logoScale-5
+logoScale-4
 fontSize-150
 marginTopImg-0
 marginTopText-600
