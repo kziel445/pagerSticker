@@ -1,9 +1,9 @@
-logoScale-0.8
+logoScale-4
 fontSize-150
-marginTopImg-100
+marginTopImg-0
 marginTopText-600
 font-fonts/LatoBlack.ttf
-shape-shapePager.png
-logo-Alpha_TV_logo.svg.png
+shape-shape3.png
+logo-kwiat.png
 countStart-1
 countStop-16

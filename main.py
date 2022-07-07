@@ -24,5 +24,3 @@ a4 = schemas.create_a4_format(a4,
                               )
 a4.show()
 a4.save("stickers.pdf")
-
-input("Press enter to continue")
