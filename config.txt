@@ -1,6 +1,6 @@
-logoScale-4
+logoScale-1
 fontSize-150
-marginTopImg-0
+marginTopImg-50
 marginTopText-600
 font-fonts/LatoBlack.ttf
 shape-shape3.png
