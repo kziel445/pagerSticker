@@ -1,31 +1,34 @@
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import sys
 
+
 def create_scheme(base, img, pos_y, scale):
     w_shape, h_shape = base.size
     w, h = img.size
 
     img = img.resize((int(w_shape * scale), int(w_shape / w * h * scale)))
-    baseShape = Image.new("RGBA", img.size, "BLACK")
-    base.paste(img, (int(w_shape / 2 - img.size[0] / 2), pos_y), baseShape)
+    mask = create_mask_from_shape(base).convert("L")
+
+    base.paste(img, (int(w_shape / 2 - img.size[0] / 2), pos_y), img)
+
+    base.putalpha(mask)
+
+    # base = Image.composite(base, base, mask)
+
 
     return base
 
 
 def create_mask_from_shape(shape):
-    mask = shape.copy()
-
+    mask = shape.copy().convert("RGBA")
     width = mask.size[0]
     height = mask.size[1]
     for i in range(0, width):  # process all pixels
         for j in range(0, height):
             data = mask.getpixel((i, j))
             # print(data) #(255, 255, 255)
-            if (data[0] == 255 and data[1] == 255 and data[2] == 255):
-                mask.putpixel((i, j), (44, 44, 44))
-    mask.show()
-
-    mask.show()
+            if (data[0] != 255 and data[1] != 255 and data[2] != 255):
+                mask.putpixel((i, j), (0, 0, 0))
 
     return mask
 
@@ -47,11 +50,15 @@ def create_a4_format(a4_base, base_schema, font, height, countStart, countStop):
     position = [0, 0]
     for i in range(countStart, countStop + 1):
         tmp = create_from_schema(base_schema, str(i), font, height)
+        if a4_base.size[1] < position[1] + base_schema.size[1]:
+            return a4_base
+
         a4_base.paste(tmp, (position[0], position[1]), tmp)
+
         if a4_base.size[0] < position[0] + base_schema.size[0] * 2:
-            position[0] = 0
-            position[1] += base_schema.size[1]
+                position[0] = 0
+                position[1] += base_schema.size[1] + 10
         else:
-            position[0] += base_schema.size[0]
+            position[0] += base_schema.size[0] + 10
 
     return a4_base
