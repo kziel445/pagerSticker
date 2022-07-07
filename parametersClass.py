@@ -13,7 +13,7 @@ class Parameters:
 
     def __init__(self):
         try:
-            file = open("config", "r")
+            file = open("config.txt", "r")
             lines = file.readlines()
             for line in lines:
                 if line.split("-")[0] in self.config:

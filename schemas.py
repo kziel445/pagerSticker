@@ -6,8 +6,11 @@ def create_scheme(base, img, pos_y, scale):
     w, h = img.size
 
     img = img.resize((int(w_shape * scale), int(w_shape / w * h * scale)))
-
-    base.paste(img, (int(w_shape / 2 - img.size[0] / 2), pos_y), img)
+    baseShape = Image.new("RGBA", img.size, "BLACK")
+    baseShape.show()
+    base.paste(img,(0,0), baseShape)
+    base.show()
+    base.paste(img, (int(w_shape / 2 - img.size[0] / 2), pos_y), baseShape)
 
     return base
 
